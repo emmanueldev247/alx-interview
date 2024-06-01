@@ -1,0 +1,10 @@
+*.pyc
+__p*
+~*
+*.exe
+*.out
+.*
+_putchar.c
+*main.c
+*main.py
+*main.js
