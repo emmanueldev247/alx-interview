@@ -2,7 +2,14 @@
 """function that returns a list of lists of integers
     representing the Pascal’s triangle of n
 """
+
+
 def pascal_triangle(n):
+    """
+    Args
+        n(int): length of triangle (assume n will be always an integer)
+        return: list of lists of integers representing the Pascal’s triangle of n
+    """
     if n <= 0:
         return []
 
