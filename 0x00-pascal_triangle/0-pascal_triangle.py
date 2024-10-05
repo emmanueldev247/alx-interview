@@ -8,7 +8,7 @@ def pascal_triangle(n):
     """
     Args
         n(int): length of triangle (assume n will be always an integer)
-        return: list of lists representing the Pascal’s triangle of n
+    return: list of lists representing the Pascal’s triangle of n
     """
     if n <= 0:
         return []
