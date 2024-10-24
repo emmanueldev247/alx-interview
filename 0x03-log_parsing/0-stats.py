@@ -2,8 +2,6 @@
 
 """Write a script that reads stdin line by line and computes metrics"""
 
-import re
-import signal
 import sys
 
 
@@ -18,25 +16,6 @@ def statistics():
         if value != 0:
             print(f'{key}: {value}')
 
-    """
-    print(f'File size: {total_size}')
-    for key, value in dict(sorted(status_code_count.items())).items():
-        print(f'{key}: {value}')
-    """
-
-
-def handle_sigint(signal, frame):
-    """
-      Function to handle signt sgnal (CTRL + C)
-      Arguments:
-          signal: signal
-          frame: frame where the signal was sent from
-      Return: None
-    """
-    sys.exit(0)
-
-
-signal.signal(signal.SIGINT, handle_sigint)
 
 # Entry point
 # possible status code
@@ -48,21 +27,19 @@ cache = {
 }
 
 total_size = 0
-log_pattern = r'\S+ \- \[.*?\] \".*?\" (\d{3}) (\d+)'
 buffer_count = 0
 
 try:
     for line in sys.stdin:
-        log = line.strip()
-        if re.fullmatch(log_pattern, log):
-            buffer_count += 1
-
-            total_size += int(log.split()[8])
-            status_code = log.split()[7]
-
-        if status_code in cache.keys():
-            cache[status_code] += 1
-
+        try:
+            log = line.split()
+            total_size += int(log[-1])
+            status_code = log[-2]
+            if status_code in cache.keys():
+                cache[status_code] += 1
+        except:
+            pass
+        buffer_count += 1
         if buffer_count == 10:
             buffer_count = 0
             statistics()
