@@ -14,8 +14,15 @@ def statistics():
       Return: None
     """
     print(f'File size: {total_size}')
+    for key, value in sorted(cache.items()):
+        if value != 0:
+            print(f'{key}: {value}')
+
+    """
+    print(f'File size: {total_size}')
     for key, value in dict(sorted(status_code_count.items())).items():
         print(f'{key}: {value}')
+    """
 
 
 def handle_sigint(signal, frame):
@@ -26,30 +33,41 @@ def handle_sigint(signal, frame):
           frame: frame where the signal was sent from
       Return: None
     """
-    statistics()
     sys.exit(0)
 
 
 signal.signal(signal.SIGINT, handle_sigint)
 
 # Entry point
+# possible status code
+cache = {
+    '200':0, '301':0,
+    '400':0, '401':0,
+    '403':0, '404':0,
+    '405':0, '500':0
+}
+
 total_size = 0
-status_code_count = {}
 log_pattern = r'\S+ \- \[.*?\] \".*?\" (\d{3}) (\d+)'
 buffer_count = 0
-for line in sys.stdin:
-    log = line.strip()
-    if re.fullmatch(log_pattern, log):
-        buffer_count += 1
 
-        total_size += int(log.split()[8])
-        status_code = log.split()[7]
+try:
+    for line in sys.stdin:
+        log = line.strip()
+        if re.fullmatch(log_pattern, log):
+            buffer_count += 1
 
-        if status_code in status_code_count:
-            status_code_count[status_code] += 1
-        else:
-            status_code_count[status_code] = 1
+            total_size += int(log.split()[8])
+            status_code = log.split()[7]
 
-    if buffer_count == 10:
-        statistics()
-        buffer_count = 0
+        if status_code in cache.keys():
+            cache[status_code] += 1
+
+        if buffer_count == 10:
+            buffer_count = 0
+            statistics()
+except Exception:
+    pass
+
+finally:
+    statistics()
