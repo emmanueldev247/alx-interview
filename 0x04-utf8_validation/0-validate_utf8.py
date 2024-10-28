@@ -15,13 +15,34 @@ def validUTF8(data):
     Returns:
         True if the input data is a valid UTF-8 encoding, False otherwise.
     """
-    expected_byte = check_lead(data[0])
-    if expected_byte == 0:
-        return False
-    elif expected_byte == 1:
+    skip = 0 # to store the continuation bytes to skip in outer loop
+    is_consumed = False # to note that multi-byte character has been consumed
+    if len(data) < 1: # empty list will pass
         return True
-    else:
-        return verify(data[1:expected_byte])
+
+    for i in range(len(data)):
+        if skip > 0:
+            is_consumed = True # multi-byte consumed
+            skip -= 1
+            continue
+
+        byte = data[i]
+        expected_byte = check_lead(byte)
+
+        # after consuming a multi-byte character, the next byte should either
+        # start a new valid character (which can be 1 to 4 bytes)
+        # or be a continuation byte for the previous character
+        if is_consumed and expected_byte == 1:
+            return False
+        if expected_byte == 0:
+            return False
+        else:
+            for j in range(1, expected_byte): # multi-byte character
+                byte = data[i + j]
+                if not check_others(byte):
+                    return False
+        skip += expected_byte - 1
+    return True
 
 
 def check_lead(num):
@@ -40,6 +61,8 @@ def check_lead(num):
             - 4 if it's the start of a valid 4-byte character (11110xxx).
             - 0 if the byte does not represent a valid UTF-8 leading byte.
     """
+    if num < 0 or num > 255:
+        return 0
     if num & 0b10000000 == 0:
         return 1
     elif num & 0b11100000 == 0b11000000:
@@ -64,26 +87,9 @@ def check_others(num):
             - True if the byte is a valid continuation byte (10xxxxxx).
             - False if the byte is not a valid continuation byte.
     """
+    if num < 0 or num > 255:
+        return False
     if num & 0b11000000 == 0b10000000:
         return True
     else:
         return False
-
-
-def verify(data):
-    """
-    Verify that all continuation bytes in a UTF-8 character are valid.
-
-    Args:
-        data (list of int): A list of integers where
-                            each integer represents a byte.
-
-    Returns:
-        bool:
-            - True if all continuation bytes are valid.
-            - False if any byte is not a valid continuation byte.
-    """
-    for byte in data:
-        if not check_others(byte):
-            return False
-    return True
