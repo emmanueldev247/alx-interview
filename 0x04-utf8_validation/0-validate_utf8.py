@@ -61,8 +61,6 @@ def check_lead(num):
             - 4 if it's the start of a valid 4-byte character (11110xxx).
             - 0 if the byte does not represent a valid UTF-8 leading byte.
     """
-    if num < 0 or num > 255:
-        return 0
     if num & 0b10000000 == 0:
         return 1
     elif num & 0b11100000 == 0b11000000:
