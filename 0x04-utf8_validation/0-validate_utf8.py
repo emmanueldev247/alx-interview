@@ -15,14 +15,14 @@ def validUTF8(data):
     Returns:
         True if the input data is a valid UTF-8 encoding, False otherwise.
     """
-    skip = 0 # to store the continuation bytes to skip in outer loop
-    is_consumed = False # to note that multi-byte character has been consumed
-    if len(data) < 1: # empty list will pass
+    skip = 0  # to store the continuation bytes to skip in outer loop
+    is_consumed = False  # to note that multi-byte character has been consumed
+    if len(data) < 1:  # empty list will pass
         return True
 
     for i in range(len(data)):
         if skip > 0:
-            is_consumed = True # multi-byte consumed
+            is_consumed = True  # multi-byte consumed
             skip -= 1
             continue
 
@@ -32,12 +32,12 @@ def validUTF8(data):
         # after consuming a multi-byte character, the next byte should either
         # start a new valid character (which can be 1 to 4 bytes)
         # or be a continuation byte for the previous character
-        if is_consumed and expected_byte == 1:
-            return False
+#       if is_consumed and expected_byte == 1:
+#           return False
         if expected_byte == 0:
             return False
         else:
-            for j in range(1, expected_byte): # multi-byte character
+            for j in range(1, expected_byte):  # multi-byte character
                 byte = data[i + j]
                 if not check_others(byte):
                     return False
