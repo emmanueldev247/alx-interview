@@ -37,10 +37,13 @@ def validUTF8(data):
         if expected_byte == 0:
             return False
         else:
-            for j in range(1, expected_byte):  # multi-byte character
-                byte = data[i + j]
-                if not check_others(byte):
-                    return False
+            try:
+                for j in range(1, expected_byte):  # multi-byte character
+                    byte = data[i + j]
+                    if not check_others(byte):
+                        return False
+            except IndexError:  # incomplete bytes
+                return False
         skip += expected_byte - 1
     return True
 
