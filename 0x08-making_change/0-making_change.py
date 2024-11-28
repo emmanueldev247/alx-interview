@@ -25,6 +25,6 @@ def makeChange(coins, total):
                 num_coin = total // coin
                 count += num_coin
                 total -= (num_coin * coin)
-        except Exception:
-            return -1
+    except Exception:
+        return -1
     return count
