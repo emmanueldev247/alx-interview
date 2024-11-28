@@ -16,19 +16,15 @@ def makeChange(coins, total):
         return 0
 
     count = 0
-
     coins.sort()
 
-    coin = coins.pop()
-    while total > 0:
-        try:
-            if coin > total:
-                while coin > total:
-                    coin = coins.pop()
-            count += 1
-            total -= coin
-            """Debugging:
-            print(f'{count}: {total + coin} - {coin} = {total}') """
-        except Exception as e:
+    try:
+        while total > 0:
+            coin = coins.pop()
+            if coin <= total:
+                num_coin = total // coin
+                count += num_coin
+                total -= (num_coin * coin)
+        except Exception:
             return -1
     return count
