@@ -19,21 +19,24 @@ def island_perimeter(grid):
             for col in range(cols):
                 if grid[row][col] == 1:
                     per = 4
-                """Check up"""
-                if row > 0:
-                    if grid[row - 1][col] == 1:
-                        per -= 1
-                """Check down"""
-                if row < rows - 1:
-                    if grid[row + 1][col] == 1:
-                        per -= 1
-                """Check left"""
-                if col > 0:
-                    if grid[row][col - 1] == 1:
-                        per -= 1
-                """Check right"""
-                if col < cols - 1:
-                    if grid[row][col + 1] == 1:
-                        per -= 1
-                sum_per += per
-                return sum_per
+                    """Check up"""
+                    if row > 0:
+                        if grid[row - 1][col] == 1:
+                            per -= 1
+                    """Check down"""
+                    if row < rows - 1:
+                        if grid[row + 1][col] == 1:
+                            per -= 1
+                    """Check left"""
+                    if col > 0:
+                        if grid[row][col - 1] == 1:
+                            per -= 1
+                    """Check right"""
+                    if col < cols - 1:
+                        if grid[row][col + 1] == 1:
+                            per -= 1
+                    sum_per += per
+        return sum_per
+    except Exception as e:
+        print(e)
+        return 0
