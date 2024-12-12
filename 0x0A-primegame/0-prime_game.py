@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """Prime Game"""
-import math
 
 
 def isWinner(x, nums):
@@ -67,7 +66,7 @@ def has_prime(lst):
     for n in lst:
         if n <= 1:
             continue
-        for i in range(2, int(math.sqrt(n)) + 1):
+        for i in range(2, int(sqrt(n)) + 1):
             if n % i == 0:
                 break
         else:
@@ -87,8 +86,27 @@ def sieve_of_eratosthenes(limit):
     """
     primes = [True] * (limit + 1)
     primes[0] = primes[1] = False
-    for i in range(2, int(math.sqrt(limit)) + 1):
+    for i in range(2, int(sqrt(limit)) + 1):
         if primes[i]:
             for j in range(i * i, limit + 1, i):
                 primes[j] = False
     return [i for i in range(2, limit + 1) if primes[i]]
+
+
+def sqrt(x):
+    """Calculates the square root of a number using the Babylonian method.
+
+    Args:
+        x: The number to find the square root of.
+
+    Returns:
+        The square root of x as a float.
+    """
+    if x == 0:
+        return 0
+
+    guess = x / 2
+    while abs(guess**2 - x) > 0.00001:
+        guess = (guess + x / guess) / 2
+
+    return guess
