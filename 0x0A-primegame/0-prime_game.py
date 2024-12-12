@@ -15,6 +15,8 @@ def isWinner(x, nums):
         x (int): number of rounds
         nums (list): an array of n
     """
+    if not nums or x < 1:
+        return None
 
     players = {'Maria': 0, 'Ben': 0}
     win = {}
