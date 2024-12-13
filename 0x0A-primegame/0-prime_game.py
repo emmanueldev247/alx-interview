@@ -86,6 +86,8 @@ def sieve_of_eratosthenes(limit):
     Returns:
         A list of prime numbers up to the given limit.
     """
+    if limit < 2:
+        return []
     primes = [True] * (limit + 1)
     primes[0] = primes[1] = False
     for i in range(2, int(sqrt(limit)) + 1):
