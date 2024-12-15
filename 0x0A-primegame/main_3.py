@@ -8,9 +8,11 @@ start_time = time.time()
 
 isWinner = __import__('0-prime_game').isWinner
 
+nums = [0] * 10000
+for i in range(10000):
+    nums[i] = i
 
-print("Winner: {}".format(isWinner(6, [1, 1, 0, 0, 1, 8])))
-
+print("Winner: {}".format(isWinner(10000, nums)))
 
 end_time = time.time()
 execution_time = end_time - start_time
